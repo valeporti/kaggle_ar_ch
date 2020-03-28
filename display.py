@@ -6,6 +6,19 @@ import numpy as np
 cmap = colors.ListedColormap(['#000000', '#0074D9','#FF4136','#2ECC40','#FFDC00','#AAAAAA', '#F012BE', '#FF851B', '#7FDBFF', '#870C25'])
 norm = colors.Normalize(vmin=0, vmax=9)
 
+def plot_pictures(pictures, labels):
+  fig, axs = plt.subplots(1, len(pictures), figsize=(2*len(pictures),32))
+  for i, (pict, label) in enumerate(zip(pictures, labels)):
+    axs[i].imshow(np.array(pict), cmap=cmap, norm=norm)
+    axs[i].set_title(label)
+  plt.show()
+    
+def plot_sample(sample, predict=None):
+  if predict is None:
+    plot_pictures([sample['input'], sample['output']], ['Input', 'Output'])
+  else:
+    plot_pictures([sample['input'], sample['output'], predict], ['Input', 'Output', 'Predict'])
+
 def showTotalColors():
   # 0:black, 1:blue, 2:red, 3:greed, 4:yellow,
   # 5:gray, 6:magenta, 7:orange, 8:sky, 9:brown
@@ -24,6 +37,16 @@ def plotOne(ax, task_in_out, title):
   ax.set_xticklabels([])
   ax.set_yticklabels([])
   ax.grid(True, which='both', color='lightgrey', linewidth=0.5) 
+  """ axs[0, fig_num].imshow(train_info[i]['input'], cmap=cmap, norm=norm)
+  axs[0, fig_num].set_title(f'Train Input {i}')
+  #axs[0, fig_num].axis('off')
+  axs[0, fig_num].set_yticks(list(range(t_in.shape[0])))
+  axs[0, fig_num].set_xticks(list(range(t_in.shape[1])))
+  axs[1, fig_num].imshow(train_info[i]['output'], cmap=cmap, norm=norm)
+  axs[1, fig_num].set_title(f'Train Output {i}')
+  #axs[1, fig_num].axis('off')
+  axs[1, fig_num].set_yticks(list(range(t_out.shape[0])))
+  axs[1, fig_num].set_xticks(list(range(t_out.shape[1]))) """
 
 def plot_task(task_info, n, name, test_task=False):
   # 0:black, 1:blue, 2:red, 3:greed, 4:yellow,
@@ -40,33 +63,13 @@ def plot_task(task_info, n, name, test_task=False):
     if (t_in > 9).any() or (t_out > 9).any(): print(f"Number Out of color range ({np.max(t_in)}, {np.max(t_out)}")
     plotOne(axs[0, fig_num], t_in, f'{n}: Train Input {i} - {t_in.shape} - {name}')
     plotOne(axs[1, fig_num], t_out, f'{n}: Train Output {i} - {t_out.shape} - {name}')
-    """ axs[0, fig_num].imshow(train_info[i]['input'], cmap=cmap, norm=norm)
-    axs[0, fig_num].set_title(f'Train Input {i}')
-    #axs[0, fig_num].axis('off')
-    axs[0, fig_num].set_yticks(list(range(t_in.shape[0])))
-    axs[0, fig_num].set_xticks(list(range(t_in.shape[1])))
-    axs[1, fig_num].imshow(train_info[i]['output'], cmap=cmap, norm=norm)
-    axs[1, fig_num].set_title(f'Train Output {i}')
-    #axs[1, fig_num].axis('off')
-    axs[1, fig_num].set_yticks(list(range(t_out.shape[0])))
-    axs[1, fig_num].set_xticks(list(range(t_out.shape[1]))) """
     fig_num += 1
   for i, t in enumerate(task_info['test']):
     t_in, t_out = np.array(t["input"]), np.array(t["output"]) if not test_task else None
     if (t_in > 9).any() or (t_out > 9).any(): print(f"Number Out of color range ({np.max(t_in)}, {np.max(t_out)}")
     plotOne(axs[0, fig_num], t_in, f'{n}: Test Input {i} - {t_in.shape} - {name}')
-    """ axs[0, fig_num].imshow(test_info[i]['input'], cmap=cmap, norm=norm)
-    axs[0, fig_num].set_title(f'Test Input {i}')
-    #axs[0, fig_num].axis('off')
-    axs[0, fig_num].set_yticks(list(range(t_in.shape[0])))
-    axs[0, fig_num].set_xticks(list(range(t_in.shape[1]))) """
     if not test_task: 
       plotOne(axs[1, fig_num], t_out, f'Test Output {i} - {t_out.shape} - {name}')
-      """ axs[1, fig_num].imshow(test_info[i]['output'], cmap=cmap, norm=norm)
-      axs[1, fig_num].set_title(f'Test Output {i}')
-      #axs[1, fig_num].axis('off')
-      axs[1, fig_num].set_yticks(list(range(t_out.shape[0])))
-      axs[1, fig_num].set_xticks(list(range(t_out.shape[1]))) """
     else:
       axs[1, fig_num].axis('off')
     fig_num += 1

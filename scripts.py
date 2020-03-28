@@ -10,4 +10,3 @@ def showNTrainingSamples(n, tasks, tasks_path, test_task=False, show=False):
     task_info = hp.getGeneralInfoFromTask(f'{tasks_path}/{path}')
     if show: pp(task_info)
     dp.plot_task(task_info, i, path.split('.')[0], test_task=test_task)
-    
